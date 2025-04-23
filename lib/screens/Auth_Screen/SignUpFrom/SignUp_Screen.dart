@@ -1,74 +1,168 @@
+import 'package:fit_bro/models/blocs/cubit/AuthCubit/auth_cubit.dart';
+import 'package:fit_bro/screens/Auth_Screen/Login_Screen.dart';
+import 'package:fit_bro/screens/Auth_Screen/SignUpFrom/Sign_From.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// TODO: add flutter_svg package
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
-import '../../../consts/Colors.dart';
-import '../../../models/blocs/cubit/AuthCubit/auth_cubit.dart';
-import 'Image_Section.dart';
-import 'Sign_From.dart';
-
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  bool _acceptTerms = false;
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-  create: (context) => AuthCubit(),
-  child: Scaffold(
-
-      backgroundColor: AppColors.backGround,
-
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
       body: SafeArea(
-        child: SizedBox(
-          width: double.infinity,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const Text(
-                    "Register Account",
-                    style: TextStyle(
-                      color: AppColors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+        child: BlocProvider(
+          create: (context) => AuthCubit(),
+          child: Builder(
+            builder:
+                (context) => SizedBox(
+                  width: double.infinity,
+                  child: Padding(
+                    padding: EdgeInsets.all(16.w),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Text(
+                            "Create Your Account",
+                            style: TextStyle(
+                              color: const Color(0xFF1E293B),
+                              fontSize: 28.sp,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Quicksand',
+                            ),
+                          ).animate().fadeIn(duration: 800.ms),
+                          SizedBox(height: 8.h),
+                          Text(
+                            "Sign up with your email",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: const Color(0xFF64748B),
+                              fontSize: 16.sp,
+                              fontFamily: 'Quicksand',
+                            ),
+                          ).animate().fadeIn(duration: 800.ms, delay: 200.ms),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.05,
+                          ),
+                          SignUpForm(
+                            onTermsChanged: (value) {
+                              setState(() {
+                                _acceptTerms = value;
+                              });
+                            },
+                            acceptTerms: _acceptTerms,
+                          ).animate().fadeIn(duration: 800.ms, delay: 400.ms),
+                          SizedBox(height: 16.h),
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: _acceptTerms,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _acceptTerms = value ?? false;
+                                  });
+                                },
+                                activeColor: const Color(0xFFFF7643),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  'I agree to the Terms and Conditions',
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: const Color(0xFF1E293B),
+                                    fontFamily: 'Quicksand',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ).animate().fadeIn(duration: 800.ms, delay: 1000.ms),
+                          SizedBox(height: 16.h),
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text:
+                                  "By continuing, you confirm that you agree\nwith our ",
+                              style: TextStyle(
+                                color: const Color(0xFF64748B),
+                                fontSize: 14.sp,
+                                fontFamily: 'Quicksand',
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: "Terms and Conditions",
+                                  style: TextStyle(
+                                    color: const Color(0xFFFF7643),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ).animate().fadeIn(duration: 800.ms, delay: 1200.ms),
+                          SizedBox(height: 16.h),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder:
+                                      (
+                                        context,
+                                        animation,
+                                        secondaryAnimation,
+                                      ) => const LoginScreen(),
+                                  transitionsBuilder: (
+                                    context,
+                                    animation,
+                                    secondaryAnimation,
+                                    child,
+                                  ) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                            child: Text.rich(
+                              TextSpan(
+                                text: "Already have an account? ",
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  color: const Color(0xFF1E293B),
+                                  fontFamily: 'Quicksand',
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: "Sign In",
+                                    style: TextStyle(
+                                      fontSize: 16.sp,
+                                      color: const Color(0xFFFF7643),
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ).animate().fadeIn(duration: 800.ms, delay: 1400.ms),
+                        ],
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    "Complete your details or continue \nwith social media",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Color(0xFF757575)),
-                  ),
-                  // const SizedBox(height: 16),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                    ImageSection()
-                  ],),
-                  const SignUpForm(),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                  RichText(
-                    text: const TextSpan(
-                      text:
-                          "By continuing your confirm that you agree \nwith our Term and Condition",
-                      style: TextStyle(color: Color(0xFF757575)),
-                      children: [
-                        TextSpan(
-                          text: "Privacy Policy",
-                          style: TextStyle(color: Color(0xFFFF7643)),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
+                ),
           ),
         ),
       ),
-    ),
-);
+    );
   }
 }
-

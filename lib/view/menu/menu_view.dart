@@ -1,21 +1,16 @@
 import 'dart:ui';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:fit_bro/models/blocs/cubit/AuthCubit/auth_cubit.dart';
 import 'package:fit_bro/models/blocs/cubit/StoreCubit/srore_cubit.dart';
 import 'package:fit_bro/screens/Auth_Screen/Login_Screen.dart';
 import 'package:fit_bro/screens/presets.dart';
 import 'package:fit_bro/view/menu/yoga_view.dart';
 import 'package:fit_bro/view/settings/setting_view.dart';
-
 import '../../common/color_extension.dart';
 import '../../common_widget/menu_cell.dart';
 import '../../common_widget/plan_row.dart';
-import '../../consts/Colors.dart';
 import '../../screens/ExerciseHistoryScreen/ExerciseHistoryScreen.dart';
 import '../exercise/exercise_view_2.dart';
 import '../meal_plan/meal_plan_view_2.dart';
@@ -62,9 +57,11 @@ class _MenuViewState extends State<MenuView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
+    // Fetch user info on initialization
+    final authCubit = context.read<AuthCubit>();
+    authCubit.getUserInfoFire();
   }
 
   @override
@@ -108,7 +105,7 @@ class _MenuViewState extends State<MenuView> {
                               const SizedBox(width: 20),
                               Expanded(
                                 child: Text(
-                                  "Traning Plan",
+                                  "Training Plan",
                                   style: TextStyle(
                                     fontSize: 20,
                                     color: TColor.secondaryText,
@@ -127,7 +124,6 @@ class _MenuViewState extends State<MenuView> {
                             itemCount: planArr.length,
                             itemBuilder: (context, index) {
                               var itemObj = planArr[index] as Map? ?? {};
-
                               return PlanRow(
                                 mObj: itemObj,
                                 onPressed: () {
@@ -157,9 +153,8 @@ class _MenuViewState extends State<MenuView> {
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) {
-                                          return const SignInScreen();
-                                        },
+                                        builder:
+                                            (context) => const LoginScreen(),
                                       ),
                                     );
                                   });
@@ -262,19 +257,11 @@ class _MenuViewState extends State<MenuView> {
                               alignment: Alignment.center,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(25),
-                                child: CachedNetworkImage(
-                                  imageUrl: authCubit.User?.profileImage ?? "",
+                                child: Image.asset(
+                                  "assets/img/u1.png",
                                   width: 50,
                                   height: 50,
                                   fit: BoxFit.cover,
-                                  placeholder:
-                                      (context, url) => Center(
-                                        child:
-                                            LoadingAnimationWidget.discreteCircle(
-                                              color: AppColors.green,
-                                              size: 20,
-                                            ),
-                                      ),
                                 ),
                               ),
                             ),
@@ -285,7 +272,7 @@ class _MenuViewState extends State<MenuView> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    authCubit.User?.userName ?? "",
+                                    authCubit.user?.userName ?? "User",
                                     style: TextStyle(
                                       fontSize: 20,
                                       color: TColor.white,
@@ -337,9 +324,6 @@ class _MenuViewState extends State<MenuView> {
                       ),
                     );
                     break;
-                  case "3":
-                    Scaffold.of(context).openDrawer();
-                    break;
                   case "5":
                     Navigator.push(
                       context,
@@ -348,7 +332,6 @@ class _MenuViewState extends State<MenuView> {
                       ),
                     );
                     break;
-
                   case "8":
                     Navigator.push(
                       context,
@@ -378,16 +361,10 @@ class _MenuViewState extends State<MenuView> {
                           'Contact us at: fit@workouttracking.com',
                         ),
                         duration: const Duration(seconds: 5),
-                        action: SnackBarAction(
-                          label: 'OK',
-                          onPressed: () {
-                            // Optionally handle action when the user presses "OK"
-                          },
-                        ),
+                        action: SnackBarAction(label: 'OK', onPressed: () {}),
                       ),
                     );
                     break;
-
                   case "12":
                     Navigator.push(
                       context,
