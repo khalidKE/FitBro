@@ -49,6 +49,14 @@ class _SignUpFormState extends State<SignUpForm> {
           child: Column(
             children: [
               Autocomplete<String>(
+                initialValue: TextEditingValue(
+                  text: authCubit.signUpEmailController.text,
+                  selection: TextSelection.fromPosition(
+                    TextPosition(
+                      offset: authCubit.signUpEmailController.text.length,
+                    ),
+                  ),
+                ),
                 optionsBuilder: (TextEditingValue textEditingValue) {
                   if (textEditingValue.text.isEmpty) {
                     return const Iterable<String>.empty();
@@ -73,11 +81,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   focusNode,
                   onFieldSubmitted,
                 ) {
-                  // Set the controller to the cubit's controller
-                  controller.text = authCubit.signUpEmailController.text;
-                  controller.selection = TextSelection.fromPosition(
-                    TextPosition(offset: controller.text.length),
-                  );
+                  // Don't modify controller here - use initialValue instead
 
                   return TextFormField(
                     controller: controller,
@@ -253,22 +257,21 @@ class _SignUpFormState extends State<SignUpForm> {
                         },
                       );
 
-                      // Use Future.delayed to ensure the UI has time to update
-                      // before navigating to the next screen
-                      Future.delayed(Duration.zero, () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) => BlocProvider(
-                                  create:
-                                      (context) =>
-                                          AuthCubit()..getUserInfoFire(),
-                                  child: const MenuView(),
-                                ),
-                          ),
-                        );
-                      });
+                      // Clear form fields
+                      authCubit.clearControllers();
+
+                      // Create a new AuthCubit for MenuView and navigate
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => BlocProvider(
+                                create:
+                                    (context) => AuthCubit()..getUserInfoFire(),
+                                child: const MenuView(),
+                              ),
+                        ),
+                      );
                     }
                   } else if (state is AuthError) {
                     if (mounted) {
@@ -276,13 +279,33 @@ class _SignUpFormState extends State<SignUpForm> {
                         isLoading = false;
                       });
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(_mapFirebaseError(state.error))),
+                        SnackBar(
+                          content: Text(
+                            authCubit.mapFirebaseError(state.error),
+                          ),
+                        ),
                       );
                     }
                   } else if (state is AuthLoading) {
                     if (mounted) {
                       setState(() {
                         isLoading = true;
+                      });
+
+                      // Add a timeout to prevent infinite loading
+                      Future.delayed(const Duration(seconds: 10), () {
+                        if (mounted && isLoading) {
+                          setState(() {
+                            isLoading = false;
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Sign up is taking too long. Please try again.",
+                              ),
+                            ),
+                          );
+                        }
                       });
                     }
                   }
@@ -310,7 +333,9 @@ class _SignUpFormState extends State<SignUpForm> {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text(
-                                          _mapFirebaseError(e.toString()),
+                                          authCubit.mapFirebaseError(
+                                            e.toString(),
+                                          ),
                                         ),
                                       ),
                                     );
@@ -344,14 +369,6 @@ class _SignUpFormState extends State<SignUpForm> {
             ],
           ),
         ),
-        // Remove this additional loading indicator to avoid double loading UI
-        // if (isLoading)
-        //   Center(
-        //     child: LoadingAnimationWidget.discreteCircle(
-        //       color: AppColors.darkPrimaryColor,
-        //       size: 100,
-        //     ),
-        //   ),
       ],
     );
   }

@@ -16,7 +16,8 @@ class AuthCubit extends Cubit<AuthState> {
 
   // Sign-up form properties
   final GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
-  late final TextEditingController signUpEmailController = TextEditingController();
+  late final TextEditingController signUpEmailController =
+      TextEditingController();
   final TextEditingController signUpPasswordController =
       TextEditingController();
   final TextEditingController signUpConfirmPasswordController =
@@ -39,7 +40,13 @@ class AuthCubit extends Cubit<AuthState> {
             email: signUpEmailController.text.trim(),
             password: signUpPasswordController.text.trim(),
           );
-      await addUserToFireStore(userCredential);
+
+      // Store the user's authentication data locally
+      storeDataFirebase(userCredential);
+
+      // Skip Firestore completely for now
+      // We'll just use the authentication data
+
       emit(AuthSuccess(userCredential.user!));
     } catch (error) {
       emit(AuthError(error.toString()));
@@ -63,18 +70,10 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  // This method is now a no-op - it doesn't actually try to access Firestore
   Future<void> addUserToFireStore(UserCredential userCredential) async {
-    final user = userCredential.user;
-    if (user == null) {
-      throw Exception("User is null. Unable to add to Firestore.");
-    }
-    final uid = user.uid;
-    currentUid = uid;
-    await FirebaseFirestore.instance.collection(Collections.users).doc(uid).set(
-      {"Email": user.email ?? '', "uid": uid},
-      SetOptions(merge: true),
-    );
-    storeDataFirebase(userCredential);
+    // Do nothing - we're bypassing Firestore completely
+    return;
   }
 
   void storeDataFirebase(UserCredential value) {
@@ -88,23 +87,24 @@ class AuthCubit extends Cubit<AuthState> {
     emit(GetUserInfoLoading());
     try {
       final uid = LocalData.getData(key: SharedKey.uid);
+      final email = LocalData.getData(key: SharedKey.email);
+
       if (uid == null) {
         emit(GetUserInfoError('No user ID found'));
         return;
       }
-      final doc =
-          await FirebaseFirestore.instance
-              .collection(Collections.users)
-              .doc(uid)
-              .get();
-      if (doc.exists) {
-        user = UserModel(email: doc.get('Email'));
+
+      // Create user model directly from local data
+      // Skip Firestore completely
+      if (email != null) {
+        user = UserModel(email: email);
+        currentUid = uid;
         emit(GetUserInfoSuccess());
       } else {
-        emit(GetUserInfoError('User data not found'));
+        emit(GetUserInfoError('User email not found'));
       }
     } catch (e) {
-      emit(GetUserInfoError('Failed to fetch user info: $e'));
+      emit(GetUserInfoError('Failed to get user info: $e'));
     }
   }
 

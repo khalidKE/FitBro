@@ -59,15 +59,19 @@ class _MenuViewState extends State<MenuView> {
   void initState() {
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-    // Fetch user info on initialization
-    final authCubit = context.read<AuthCubit>();
-    authCubit.getUserInfoFire();
+
+    // Fetch user info after the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final authCubit = BlocProvider.of<AuthCubit>(context, listen: false);
+        authCubit.getUserInfoFire();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.sizeOf(context);
-    var authCubit = AuthCubit.get(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -149,6 +153,9 @@ class _MenuViewState extends State<MenuView> {
                             children: [
                               TextButton(
                                 onPressed: () {
+                                  final authCubit = BlocProvider.of<AuthCubit>(
+                                    context,
+                                  );
                                   authCubit.signOut().then((value) {
                                     Navigator.pushReplacement(
                                       context,
@@ -240,6 +247,24 @@ class _MenuViewState extends State<MenuView> {
                   ),
                   BlocBuilder<AuthCubit, AuthState>(
                     builder: (context, state) {
+                      // Get the AuthCubit instance
+                      final authCubit = BlocProvider.of<AuthCubit>(context);
+
+                      // Get user email from AuthCubit or use a default
+                      String userEmail = authCubit.user?.email ?? "";
+
+                      // Extract username from email (before @) or use "User" as default
+                      String displayName = "User";
+                      if (userEmail.isNotEmpty && userEmail.contains('@')) {
+                        displayName = userEmail.split('@').first;
+                        // Capitalize first letter
+                        if (displayName.isNotEmpty) {
+                          displayName =
+                              displayName[0].toUpperCase() +
+                              displayName.substring(1);
+                        }
+                      }
+
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 25,
@@ -272,7 +297,7 @@ class _MenuViewState extends State<MenuView> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    authCubit.user?.userName ?? "User",
+                                    displayName,
                                     style: TextStyle(
                                       fontSize: 20,
                                       color: TColor.white,

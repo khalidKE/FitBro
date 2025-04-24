@@ -8,12 +8,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../models/blocs/cubit/AuthCubit/auth_cubit.dart';
 import '../../view/menu/menu_view.dart';
 
-
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Initialize ScreenUtil here
+    ScreenUtil.init(context, designSize: const Size(375, 812));
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       body: SafeArea(
@@ -336,7 +338,7 @@ class LoginScreen extends StatelessWidget {
                                 },
                                 child: Text.rich(
                                   TextSpan(
-                                    text: "Don’t have an account? ",
+                                    text: "Don't have an account? ",
                                     style: TextStyle(
                                       fontSize: 16.sp,
                                       color: const Color(0xFF1E293B),
