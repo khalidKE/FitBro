@@ -2,28 +2,35 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fit_bro/models/data/data.dart';
+import 'package:share_plus/share_plus.dart'; // <- For sharing
 import '../../common/color_extension.dart';
-import '../../common_widget/response_row.dart';
 
-class WorkoutDetailView extends StatelessWidget {
+class WorkoutDetailView extends StatefulWidget {
   final Exercise exercise;
-  WorkoutDetailView({super.key, required this.exercise});
+  const WorkoutDetailView({super.key, required this.exercise});
+
+  @override
+  State<WorkoutDetailView> createState() => _WorkoutDetailViewState();
+}
+
+class _WorkoutDetailViewState extends State<WorkoutDetailView> {
+  bool isLiked = false;
 
   final List<Map<String, String>> responseArr = [
     {
-      "name": "Mikhail Eduardovich",
+      "name": "Wafaa Samir",
       "time": "09 days ago",
       "image": "assets/img/u2.png",
       "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
     },
     {
-      "name": "Mikhail Eduardovich",
+      "name": "Ahmed Mohab",
       "time": "11 days ago",
       "image": "assets/img/u1.png",
       "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
     },
     {
-      "name": "Mikhail Eduardovich",
+      "name": "Sara Ali",
       "time": "12 days ago",
       "image": "assets/img/u2.png",
       "message": "Lorem ipsum dolor sit amet, consectetur adipiscing elit,",
@@ -55,7 +62,7 @@ class WorkoutDetailView extends StatelessWidget {
         ),
         title: Text(
           overflow: TextOverflow.ellipsis,
-          exercise.name,
+          widget.exercise.name,
           style: TextStyle(
             color: TColor.white,
             fontSize: 20,
@@ -68,7 +75,7 @@ class WorkoutDetailView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CachedNetworkImage(
-              imageUrl: exercise.image,
+              imageUrl: widget.exercise.image,
               width: media.width,
               height: media.width * 0.55,
               fit: BoxFit.cover,
@@ -91,20 +98,25 @@ class WorkoutDetailView extends StatelessWidget {
                   ),
                   const Spacer(),
                   IconButton(
-                    onPressed: () {},
-                    icon: Image.asset(
-                      "assets/img/like.png",
-                      width: 20,
-                      height: 20,
+                    onPressed: () {
+                      setState(() {
+                        isLiked = !isLiked;
+                      });
+                    },
+                    icon: Icon(
+                      Icons.favorite,
+                      color: isLiked ? Colors.red : Colors.grey,
+                      size: 24,
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
-                    icon: Image.asset(
-                      "assets/img/share.png",
-                      width: 20,
-                      height: 20,
-                    ),
+                    onPressed: () {
+                      Share.share(
+                        '${widget.exercise.name}\n\nCheck this out: ${widget.exercise.image}\n\nInstructions: ${widget.exercise.instruction}',
+                        subject: 'Workout: ${widget.exercise.name}',
+                      );
+                    },
+                    icon: Icon(Icons.share, color: Colors.blueGrey, size: 24),
                   ),
                 ],
               ),
@@ -125,7 +137,7 @@ class WorkoutDetailView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      exercise.instruction,
+                      widget.exercise.instruction,
                       style: TextStyle(
                         color: TColor.secondaryText,
                         fontSize: 18,
@@ -136,79 +148,7 @@ class WorkoutDetailView extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                "17 Responses",
-                style: TextStyle(
-                  color: TColor.secondaryText,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              shrinkWrap: true,
-              itemCount: responseArr.length,
-              itemBuilder: (context, index) {
-                var rObj = responseArr[index];
-                return ResponsesRow(rObj: rObj);
-              },
-            ),
           ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 1,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              InkWell(
-                onTap: () {},
-                child: Image.asset(
-                  "assets/img/menu_running.png",
-                  width: 25,
-                  height: 25,
-                ),
-              ),
-              InkWell(
-                onTap: () {},
-                child: Image.asset(
-                  "assets/img/menu_meal_plan.png",
-                  width: 25,
-                  height: 25,
-                ),
-              ),
-              InkWell(
-                onTap: () {},
-                child: Image.asset(
-                  "assets/img/menu_home.png",
-                  width: 25,
-                  height: 25,
-                ),
-              ),
-              InkWell(
-                onTap: () {},
-                child: Image.asset(
-                  "assets/img/menu_weight.png",
-                  width: 25,
-                  height: 25,
-                ),
-              ),
-              InkWell(
-                onTap: () {},
-                child: Image.asset(
-                  "assets/img/more.png",
-                  width: 25,
-                  height: 25,
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );

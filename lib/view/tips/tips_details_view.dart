@@ -62,7 +62,7 @@ class _TipsDetailViewState extends State<TipsDetailView> {
             ),
             _buildSectionTitle("Drink water"),
             _buildSectionContent(
-              "To enhance your fitness journey, aim to drink plenty of water throughout the day by setting a daily intake goal based on your weight and activity level. Drink a glass of water before meals to aid digestion and keep hydrated during workouts by sipping water every 15-20 minutes. Monitor your urine color as a hydration indicator; pale yellow is ideal. Carry a reusable water bottle for convenience, and consider adding natural flavors like lemon or cucumber to make water more enjoyable. Lastly, listen to your body and increase your water intake in hot weather or during intense exercise, as proper hydration significantly impacts performance and recovery."
+              "To enhance your fitness journey, aim to drink plenty of water throughout the day by setting a daily intake goal based on your weight and activity level. Drink a glass of water before meals to aid digestion and keep hydrated during workouts by sipping water every 15-20 minutes. Monitor your urine color as a hydration indicator; pale yellow is ideal. Carry a reusable water bottle for convenience, and consider adding natural flavors like lemon or cucumber to make water more enjoyable. Lastly, listen to your body and increase your water intake in hot weather or during intense exercise, as proper hydration significantly impacts performance and recovery.",
             ),
             _buildSectionTitle("Calories"),
             _buildSectionContent(
@@ -71,7 +71,6 @@ class _TipsDetailViewState extends State<TipsDetailView> {
           ],
         ),
       ),
-      
     );
   }
 
@@ -101,22 +100,19 @@ class _TipsDetailViewState extends State<TipsDetailView> {
 
   List<Widget> _buildBottomNavigationItems() {
     List<String> icons = [
-      "menu_running.png",
       "menu_meal_plan.png",
       "menu_home.png",
       "menu_weight.png",
-      "more.png"
+      "more.png",
     ];
 
     return icons
-        .map((icon) => InkWell(
-              onTap: () {},
-              child: Image.asset(
-                "assets/img/$icon",
-                width: 25,
-                height: 25,
-              ),
-            ))
+        .map(
+          (icon) => InkWell(
+            onTap: () {},
+            child: Image.asset("assets/img/$icon", width: 25, height: 25),
+          ),
+        )
         .toList();
   }
 }

@@ -1,8 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../consts/Collections.dart';
 import '../../../UserModel/User_Model.dart';
 import '../../../data/Local/SharedKeys.dart';
 import '../../../data/Local/SharedPerfrence.dart';
@@ -34,12 +32,27 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> signUpWithFire() async {
     emit(AuthLoading());
+    debugPrint("⚡ AuthCubit: Starting signUpWithFire");
+
     try {
+      // Validate password match first
+      if (signUpPasswordController.text !=
+          signUpConfirmPasswordController.text) {
+        debugPrint("⚡ AuthCubit: Passwords don't match");
+        emit(AuthError("Passwords do not match"));
+        return;
+      }
+
+      debugPrint("⚡ AuthCubit: Creating user with Firebase");
       final userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
             email: signUpEmailController.text.trim(),
             password: signUpPasswordController.text.trim(),
           );
+
+      debugPrint(
+        "⚡ AuthCubit: User created successfully: ${userCredential.user?.uid}",
+      );
 
       // Store the user's authentication data locally
       storeDataFirebase(userCredential);
@@ -47,10 +60,13 @@ class AuthCubit extends Cubit<AuthState> {
       // Skip Firestore completely for now
       // We'll just use the authentication data
 
+      // Important: Emit success state with the user
+      debugPrint("⚡ AuthCubit: Emitting AuthSuccess state");
       emit(AuthSuccess(userCredential.user!));
+      debugPrint("⚡ AuthCubit: AuthSuccess state emitted");
     } catch (error) {
-      emit(AuthError(error.toString()));
-      rethrow;
+      debugPrint("⚡ AuthCubit: Error during signup: $error");
+      emit(AuthError(mapFirebaseError(error.toString())));
     }
   }
 
@@ -65,8 +81,7 @@ class AuthCubit extends Cubit<AuthState> {
       storeDataFirebase(userCredential);
       emit(AuthSuccess(userCredential.user!));
     } catch (error) {
-      emit(AuthError(error.toString()));
-      rethrow;
+      emit(AuthError(mapFirebaseError(error.toString())));
     }
   }
 
@@ -77,7 +92,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   void storeDataFirebase(UserCredential value) {
-    debugPrint("Using StoreDataFirebase");
+    debugPrint("⚡ AuthCubit: Using StoreDataFirebase");
     LocalData.setData(key: SharedKey.uid, value: value.user?.uid);
     LocalData.setData(key: SharedKey.email, value: value.user?.email);
     LocalData.setData(key: SharedKey.isLogin, value: true);

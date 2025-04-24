@@ -2,9 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fit_bro/models/blocs/cubit/workoutcubit.dart';
-//import 'package:fit_bro/models/repos/data_repo.dart';
 import 'package:fit_bro/view/workout/workout_detail_view.dart';
-
 import '../../common/color_extension.dart';
 
 class ExerciseView2 extends StatefulWidget {
@@ -42,129 +40,56 @@ class _ExerciseView2State extends State<ExerciseView2> {
           appBar: AppBar(
             backgroundColor: TColor.primary,
             centerTitle: true,
-            elevation: 0,
+            elevation: 4,
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
               },
               icon: Image.asset(
                 "assets/img/black_white.png",
-                width: 25,
-                height: 25,
+                width: 30,
+                height: 30,
               ),
             ),
             title: Text(
-              "Exercise",
+              "Exercises",
               style: TextStyle(
                 color: TColor.white,
-                fontSize: 20,
+                fontSize: 22,
                 fontWeight: FontWeight.w700,
+                letterSpacing: 1.1,
               ),
             ),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.search, size: 28),
+                onPressed: () {
+                  // Implement search functionality
+                },
+              ),
+            ],
           ),
           body: state.when(
-            loading: () => const CircularProgressIndicator.adaptive(),
+            loading: () => const Center(child: CircularProgressIndicator()),
             loaded:
                 (data) => Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 8,
+                  ),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       MuscleTabs(muscles: muscles),
+                      const SizedBox(height: 16),
                       Expanded(
                         child: ListView.builder(
                           padding: EdgeInsets.zero,
                           itemCount: data.length,
                           itemBuilder: (context, index) {
-                            return Container(
-                              clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(
-                                color: TColor.white,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder:
-                                          (context) => WorkoutDetailView(
-                                            exercise: data[index],
-                                          ),
-                                    ),
-                                  );
-                                },
-                                child: Column(
-                                  children: [
-                                    Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        CachedNetworkImage(
-                                          imageUrl: data[index].image,
-                                          width: media.width,
-                                          height: media.width * 0.55,
-                                          fit: BoxFit.cover,
-                                        ),
-                                        Container(
-                                          width: media.width,
-                                          height: media.width * 0.55,
-                                          decoration: BoxDecoration(
-                                            color: Colors.black.withOpacity(
-                                              0.5,
-                                            ),
-                                          ),
-                                        ),
-                                        Image.asset(
-                                          "assets/img/play.png",
-                                          width: 60,
-                                          height: 60,
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 4,
-                                        horizontal: 20,
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            data[index].name,
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                              color: TColor.secondaryText,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w700,
-                                            ),
-                                          ),
-                                          IconButton(
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder:
-                                                      (context) =>
-                                                          WorkoutDetailView(
-                                                            exercise:
-                                                                data[index],
-                                                          ),
-                                                ),
-                                              );
-                                            },
-                                            icon: Image.asset(
-                                              "assets/img/more.png",
-                                              width: 25,
-                                              height: 25,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            return ExerciseCard(
+                              exercise: data[index],
+                              media: media,
                             );
                           },
                         ),
@@ -172,10 +97,106 @@ class _ExerciseView2State extends State<ExerciseView2> {
                     ],
                   ),
                 ),
-            error: (message) => const Center(child: Text("Error")),
+            error: (message) => Center(child: Text("Error: $message")),
           ),
         );
       },
+    );
+  }
+}
+
+class ExerciseCard extends StatelessWidget {
+  const ExerciseCard({super.key, required this.exercise, required this.media});
+
+  final dynamic exercise;
+  final Size media;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: TColor.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            offset: Offset(0, 4),
+            blurRadius: 8,
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WorkoutDetailView(exercise: exercise),
+            ),
+          );
+        },
+        child: Column(
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                CachedNetworkImage(
+                  imageUrl: exercise.image,
+                  width: media.width,
+                  height: media.width * 0.55,
+                  fit: BoxFit.cover,
+                ),
+                Container(
+                  width: media.width,
+                  height: media.width * 0.55,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.5),
+                  ),
+                ),
+                Icon(Icons.play_circle_outline, color: Colors.white, size: 60),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      exercise.name,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: TextStyle(
+                        color: TColor.secondaryText,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) =>
+                                  WorkoutDetailView(exercise: exercise),
+                        ),
+                      );
+                    },
+                    icon: Image.asset(
+                      "assets/img/more.png",
+                      width: 28,
+                      height: 28,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -227,9 +248,9 @@ class MuscleTabs extends StatelessWidget {
     final selectedIndex = context.watch<ExerciseCubit>().selectedIndex;
     return SizedBox(
       height: 50,
-      width: double.infinity,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
+        itemCount: muscles.length,
         itemBuilder: (context, index) {
           return CatagoriesBar(
             name: muscles[index],
@@ -237,7 +258,6 @@ class MuscleTabs extends StatelessWidget {
             isSelected: index == selectedIndex,
           );
         },
-        itemCount: muscles.length,
       ),
     );
   }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fit_bro/common_widget/setting_select_row.dart';
-import 'package:fit_bro/common_widget/setting_switch_row.dart';
-import 'package:fit_bro/view/settings/connect_view.dart';
-import 'package:fit_bro/view/settings/select_language_view.dart';
+
 
 import '../../common/color_extension.dart';
 
@@ -58,39 +56,20 @@ class _SettingsViewState extends State<SettingsView> {
           var tObj = settingArr[index] as Map? ?? {};
 
           if (tObj["type"] == "switch") {
-            return SettingSwitchRow(
-              tObj: tObj,
-              onChanged: (newVal) {
-                settingArr[index]["value"] = newVal ? "true" : "false";
-                setState(() {});
-              },
-            );
+           
           } else if (tObj["type"] == "select") {
             return SettingSelectRow(
               tObj: tObj,
               onPressed: () {
                 if (tObj["name"] == "Language") {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) =>
-                              SelectLanguageView(didSelect: (newVal) {}),
-                    ),
-                  );
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ConnectView(didSelect: (newVal) {}),
-                    ),
-                  );
+                  
                 }
               },
             );
           } else {
             return Container();
           }
+          return null;
         },
         separatorBuilder: (context, index) {
           return const Divider(color: Colors.black26, height: 1);

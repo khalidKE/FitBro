@@ -106,7 +106,7 @@ class ExerciseHistoryScreen extends StatelessWidget {
           } else if (state is ErrorGetExcersiceInfo) {
             return const Center(
               child: Text(
-                "Error: No exercise history available.",
+                "No exercise history available.",
               ), // Changed to show error
             );
           }

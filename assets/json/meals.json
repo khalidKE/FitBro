@@ -174,20 +174,7 @@
     "calories": 700,
     "image_url": "https://images.pexels.com/photos/13647484/pexels-photo-13647484.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
   },
-  {
-    "name": "Easy Protein Bowl",
-    "ingredients": [
-      "2 chicken breasts",
-      "1/2 cup quinoa",
-      "1/2 cup chickpeas",
-      "1/4 cup hummus",
-      "1/2 cucumber (sliced)",
-      "Lemon juice"
-    ],
-    "instructions": "Cook chicken and quinoa. Arrange quinoa, chickpeas, chicken, and cucumber in a bowl. Drizzle with lemon juice and serve with hummus.",
-    "calories": 450,
-    "image_url": "hhttps://images.pexels.com/photos/6120244/pexels-photo-6120244.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-  },
+ 
   {
     "name": "Marry Me Chicken",
     "ingredients": [

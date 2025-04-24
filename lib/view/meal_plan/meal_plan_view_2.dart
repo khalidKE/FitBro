@@ -16,7 +16,14 @@ class MealPlanView2 extends StatelessWidget {
       create: (context) => MealCubit(DataRepo())..fetchMeals(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Recommended Meals"),
+          title: Text(
+            "Recommended Meals",
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
           backgroundColor: TColor.primary,
         ),
         body: BlocBuilder<MealCubit, MealState>(

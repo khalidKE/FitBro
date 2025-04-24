@@ -1,8 +1,8 @@
+import 'package:fit_bro/models/blocs/cubit/AuthCubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fit_bro/common/color_extension.dart';
-import 'package:fit_bro/models/blocs/cubit/AuthCubit/auth_cubit.dart';
 import 'package:fit_bro/models/blocs/cubit/StoreCubit/srore_cubit.dart';
 import 'package:fit_bro/models/data/data.dart';
 import 'package:fit_bro/models/blocs/cubit/workoutcubit.dart';

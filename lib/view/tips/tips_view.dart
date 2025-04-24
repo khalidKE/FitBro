@@ -20,7 +20,7 @@ class _TipsViewState extends State<TipsView> {
     {"name": "How many times a day to eat"},
     {"name": "Become stronger"},
     {"name": "Shoes for Training"},
-    {"name": "Appeal Tips"}
+    {"name": "Appeal Tips"},
   ];
 
   @override
@@ -69,39 +69,9 @@ class _TipsViewState extends State<TipsView> {
           );
         },
         separatorBuilder: (context, index) {
-          return const Divider(
-            color: Colors.black26,
-            height: 1,
-          );
+          return const Divider(color: Colors.black26, height: 1);
         },
         itemCount: tipsArr.length,
-      ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 1,
-        child: Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavIcon("menu_running.png"),
-              _buildNavIcon("menu_meal_plan.png"),
-              _buildNavIcon("menu_home.png"),
-              _buildNavIcon("menu_weight.png"),
-              _buildNavIcon("more.png"),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavIcon(String iconName) {
-    return InkWell(
-      onTap: () {},
-      child: Image.asset(
-        "assets/img/$iconName",
-        width: 25,
-        height: 25,
       ),
     );
   }
