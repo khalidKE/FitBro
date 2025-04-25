@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:fit_bro/common/color_extension.dart';
-import 'package:fit_bro/models/blocs/cubit/workoutcubit.dart';
-import 'package:fit_bro/models/data/data.dart';
-import 'package:fit_bro/screens/exercising.dart';
-import 'package:fit_bro/view/exercise/exercise_view_2.dart';
+import 'package:FitBro/common/color_extension.dart';
+import 'package:FitBro/models/blocs/cubit/workoutcubit.dart';
+import 'package:FitBro/models/data/data.dart';
+import 'package:FitBro/screens/exercising.dart';
+import 'package:FitBro/view/exercise/exercise_view_2.dart';
 
 class WorkoutPicker extends StatelessWidget {
   const WorkoutPicker({super.key});

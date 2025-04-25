@@ -1,46 +1,70 @@
+import 'package:FitBro/models/blocs/cubit/StoreCubit/srore_cubit.dart';
+import 'package:FitBro/models/blocs/cubit/StoreCubit/srore_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:fit_bro/models/blocs/cubit/StoreCubit/srore_cubit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../common/color_extension.dart';
 
-class ExerciseHistoryScreen extends StatelessWidget {
+class ExerciseHistoryScreen extends StatefulWidget {
   const ExerciseHistoryScreen({super.key});
 
   @override
+  _ExerciseHistoryScreenState createState() => _ExerciseHistoryScreenState();
+}
+
+class _ExerciseHistoryScreenState extends State<ExerciseHistoryScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Fetch exercise history when the screen is initialized
+    context.read<SaveCubit>().getUserExcersiceInfo();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var saveCubit = SaveCubit.get(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Exercise History"),
-        backgroundColor: TColor.primary, // Optional: Set your preferred color
+        title: Text(
+          "Exercise History",
+          style: GoogleFonts.poppins(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: TColor.primary,
       ),
-      body: BlocBuilder<SaveCubit, SroreState>(
+      body: BlocBuilder<SaveCubit, StoreState>(
         builder: (context, state) {
           if (state is LoadingGetExcersiceInfo) {
-            // Show loading indicator while data is being fetched
             return const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.teal),
               ),
             );
           } else if (state is SuccessGetExcersiceInfo) {
-            // Show the list of workout sessions
+            if (state.workoutSessions.isEmpty) {
+              return const Center(
+                child: Text(
+                  "No exercise history available.",
+                  style: TextStyle(fontSize: 18),
+                ),
+              );
+            }
             return ListView.builder(
-              itemCount: saveCubit.workoutSession.length,
+              itemCount: state.workoutSessions.length,
               itemBuilder: (context, index) {
-                final workoutSession = saveCubit.workoutSession[index];
+                final workoutSession = state.workoutSessions[index];
 
                 return Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Card(
-                    elevation: 8, // Increased elevation for depth
+                    elevation: 8,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        15,
-                      ), // Rounded corners
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     child: ExpansionTile(
                       title: Text(
@@ -60,9 +84,7 @@ class ExerciseHistoryScreen extends StatelessWidget {
                             return ListTile(
                               contentPadding: const EdgeInsets.all(10),
                               leading: ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                  8,
-                                ), // Rounded corners for the image
+                                borderRadius: BorderRadius.circular(8),
                                 child: CachedNetworkImage(
                                   imageUrl: workoutData.exercise.image,
                                   width: 50,
@@ -104,15 +126,30 @@ class ExerciseHistoryScreen extends StatelessWidget {
               },
             );
           } else if (state is ErrorGetExcersiceInfo) {
-            return const Center(
-              child: Text(
-                "No exercise history available.",
-              ), // Changed to show error
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Error loading history: ${state.error}",
+                    style: const TextStyle(fontSize: 18, color: Colors.red),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed:
+                        () => context.read<SaveCubit>().getUserExcersiceInfo(),
+                    child: const Text("Retry"),
+                  ),
+                ],
+              ),
             );
           }
           return const Center(
-            child: Text("No exercise history available."),
-          ); // Handle the case when no state matches
+            child: Text(
+              "No exercise history available.",
+              style: TextStyle(fontSize: 18),
+            ),
+          );
         },
       ),
     );

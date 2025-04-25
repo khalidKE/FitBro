@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fit_bro/models/blocs/cubit/workoutcubit.dart';
-import 'package:fit_bro/models/repos/data_repo.dart';
-import 'package:fit_bro/screens/Auth_Screen/Splash_Screen/Splash_Screen.dart';
+import 'package:FitBro/models/blocs/cubit/workoutcubit.dart';
+import 'package:FitBro/models/repos/data_repo.dart';
+import 'package:FitBro/screens/Auth_Screen/Splash_Screen/Splash_Screen.dart';
 import 'common/color_extension.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';

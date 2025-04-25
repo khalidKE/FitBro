@@ -1,4 +1,4 @@
-# fit_bro
+# FitBro
 
 A new Flutter project.
 

@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:fit_bro/models/data/data.dart';
+import 'package:FitBro/models/data/data.dart';
 import 'package:share_plus/share_plus.dart'; // <- For sharing
 import '../../common/color_extension.dart';
 
@@ -14,7 +14,7 @@ class WorkoutDetailView extends StatefulWidget {
 }
 
 class _WorkoutDetailViewState extends State<WorkoutDetailView> {
-  bool isLiked = false;
+
 
   final List<Map<String, String>> responseArr = [
     {
@@ -97,18 +97,7 @@ class _WorkoutDetailViewState extends State<WorkoutDetailView> {
                     onRatingUpdate: (rating) {},
                   ),
                   const Spacer(),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isLiked = !isLiked;
-                      });
-                    },
-                    icon: Icon(
-                      Icons.favorite,
-                      color: isLiked ? Colors.red : Colors.grey,
-                      size: 24,
-                    ),
-                  ),
+                  
                   IconButton(
                     onPressed: () {
                       Share.share(

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:fit_bro/onboard.dart';
+import 'package:FitBro/onboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

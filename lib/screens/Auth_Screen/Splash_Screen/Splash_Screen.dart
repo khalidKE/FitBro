@@ -1,6 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:fit_bro/intro.dart';
-import 'package:fit_bro/models/blocs/cubit/AuthCubit/auth_cubit.dart';
+import 'package:FitBro/intro.dart';
+import 'package:FitBro/models/blocs/cubit/AuthCubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
@@ -8,7 +8,6 @@ import 'package:lottie/lottie.dart';
 import '../../../models/data/Local/SharedKeys.dart';
 import '../../../models/data/Local/SharedPerfrence.dart';
 import '../../../view/menu/menu_view.dart';
-
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

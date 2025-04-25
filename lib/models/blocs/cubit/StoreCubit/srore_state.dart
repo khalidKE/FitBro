@@ -1,39 +1,32 @@
-part of 'srore_cubit.dart';
-
-@immutable
-abstract class SroreState {}
-
-class SroreInitial extends SroreState {}
-
-// for excersice
-
-class LoadingSetExcersiceInfo extends SroreState {}
 
 
-class SuccessSetExcersiceInfo extends SroreState {}
+import 'package:FitBro/models/data/data.dart';
 
 
-class ErrorSetExcersiceInfo extends SroreState {
-  final String message;
-  ErrorSetExcersiceInfo(this.message);
+abstract class StoreState {}
+
+class StoreInitial extends StoreState {}
+
+class LoadingSetExcersiceInfo extends StoreState {}
+
+class SuccessSetExcersiceInfo extends StoreState {}
+
+class ErrorSetExcersiceInfo extends StoreState {
+  final String error;
+
+  ErrorSetExcersiceInfo(this.error);
 }
 
-// for get excersice
+class LoadingGetExcersiceInfo extends StoreState {}
 
+class SuccessGetExcersiceInfo extends StoreState {
+  final List<WorkoutSession> workoutSessions;
 
-class LoadingGetExcersiceInfo extends SroreState {}
-
-// success get excersice
-
-class SuccessGetExcersiceInfo extends SroreState {
-  final List<WorkoutSession> workoutSession;
-  SuccessGetExcersiceInfo(this.workoutSession);
+  SuccessGetExcersiceInfo(this.workoutSessions);
 }
 
-// error get excersice
-class ErrorGetExcersiceInfo extends SroreState {
-  final String message;
-  ErrorGetExcersiceInfo(this.message);
+class ErrorGetExcersiceInfo extends StoreState {
+  final String error;
+
+  ErrorGetExcersiceInfo(this.error);
 }
-
-

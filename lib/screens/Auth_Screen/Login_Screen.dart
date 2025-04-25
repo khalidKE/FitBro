@@ -1,4 +1,4 @@
-import 'package:fit_bro/screens/Auth_Screen/SignUp_Screen.dart';
+import 'package:FitBro/screens/Auth_Screen/SignUp_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

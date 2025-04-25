@@ -1,5 +1,5 @@
-import 'package:fit_bro/models/blocs/cubit/AuthCubit/auth_cubit.dart';
-import 'package:fit_bro/screens/Auth_Screen/Login_Screen.dart';
+import 'package:FitBro/models/blocs/cubit/AuthCubit/auth_cubit.dart';
+import 'package:FitBro/screens/Auth_Screen/Login_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

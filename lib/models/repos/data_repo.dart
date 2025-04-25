@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:fit_bro/models/data/data.dart';
+import 'package:FitBro/models/data/data.dart';
 
 class DataRepo {
   Future<List<Exercise>> getExercises() async {

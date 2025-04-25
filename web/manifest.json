@@ -1,6 +1,6 @@
 {
-    "name": "fit_bro",
-    "short_name": "fit_bro",
+    "name": "FitBro",
+    "short_name": "FitBro",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

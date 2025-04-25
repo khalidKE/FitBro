@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fit_bro/models/blocs/cubit/workoutcubit.dart';
-import 'package:fit_bro/view/workout/workout_detail_view.dart';
+import 'package:FitBro/models/blocs/cubit/workoutcubit.dart';
+import 'package:FitBro/view/workout/workout_detail_view.dart';
 import '../../common/color_extension.dart';
 
 class ExerciseView2 extends StatefulWidget {

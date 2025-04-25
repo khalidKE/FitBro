@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-
+import 'package:google_fonts/google_fonts.dart';
+import 'package:share_plus/share_plus.dart'; // <- For sharing
 import '../../common/color_extension.dart';
 
 class YogaView extends StatefulWidget {
@@ -11,112 +12,125 @@ class YogaView extends StatefulWidget {
 }
 
 class _YogaViewState extends State<YogaView> {
-  List workArr = [
+  final List<Map<String, String>> workArr = [
     {"name": "Jumping", "image": "assets/img/2.png"},
-
-    {"name": "Jumping", "image": "assets/img/3.png"},
+    {"name": "Stretch", "image": "assets/img/3.png"},
   ];
 
- 
+
 
   @override
   Widget build(BuildContext context) {
-    var media = MediaQuery.sizeOf(context);
+    final media = MediaQuery.of(context).size;
+
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
         backgroundColor: TColor.primary,
         centerTitle: true,
-        elevation: 0.1,
+        elevation: 0,
         leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Image.asset(
-            "assets/img/black_white.png",
-            width: 25,
-            height: 25,
-          ),
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
         ),
         title: Text(
           "Yoga",
-          style: TextStyle(
-            color: TColor.white,
+          style: GoogleFonts.poppins(
+            color: Colors.white,
             fontSize: 20,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              "assets/img/1.png",
-              width: media.width,
-              height: media.width * 0.55,
-              fit: BoxFit.cover,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(
+                "assets/img/1.png",
+                width: media.width,
+                height: media.width * 0.55,
+                fit: BoxFit.cover,
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Row(
-                children: [
-                  IgnorePointer(
-                    ignoring: true,
-                    child: RatingBar.builder(
-                      initialRating: 4,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemSize: 25,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
-                      itemBuilder:
-                          (context, _) =>
-                              Icon(Icons.star, color: TColor.primary),
-                      onRatingUpdate: (rating) {
-                        print(rating);
-                      },
-                    ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                IgnorePointer(
+                  ignoring: true,
+                  child: RatingBar.builder(
+                    initialRating: 4,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemSize: 24,
+                    itemPadding: const EdgeInsets.symmetric(horizontal: 1.0),
+                    itemBuilder:
+                        (context, _) => Icon(Icons.star, color: TColor.primary),
+                    onRatingUpdate: (_) {},
                   ),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Image.asset(
-                      "assets/img/like.png",
-                      width: 20,
-                      height: 20,
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Image.asset(
-                      "assets/img/share.png",
-                      width: 20,
-                      height: 20,
-                    ),
+                ),
+                const Spacer(),
+
+                IconButton(
+                  onPressed: () {
+                    Share.share(
+                      'Check out this amazing Yoga exercise!\n\n${workArr[0]['name']}',
+                      subject: 'Yoga Exercise: ${workArr[0]['name']}',
+                    );
+                  },
+                  icon: Icon(Icons.share, color: Colors.blueGrey, size: 24),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "Tips",
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: TColor.secondaryText,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 6,
+                    offset: Offset(0, 4),
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+              padding: const EdgeInsets.all(16),
               child: Text(
-                "Tips",
-                style: TextStyle(
+                "Yoga is more than just a physical practice—it’s a journey of the mind, body, and breath. "
+                "By connecting movement with mindful breathing, yoga helps reduce stress, improve flexibility, and increase overall mental clarity.\n\n"
+                "Beginner Tips:\n"
+                "- Start with basic poses like Child’s Pose, Downward Dog, and Mountain Pose.\n"
+                "- Don’t worry about being perfect—listen to your body.\n"
+                "- Focus on your breathing—it’s your guide.\n\n"
+                "Benefits:\n"
+                "- Enhances strength and flexibility\n"
+                "- Improves posture and balance\n"
+                "- Promotes better sleep and mental focus\n\n"
+                "Yoga isn’t about touching your toes—it’s about what you learn on the way down. "
+                "Take your time, stay consistent, and enjoy every moment on the mat.",
+                style: GoogleFonts.roboto(
+                  fontSize: 16,
                   color: TColor.secondaryText,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
+                  height: 1.5,
                 ),
               ),
             ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
-              child: Text(
-                "   Lore ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et  dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.m ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Eget lorem dolor sed viverra ipsum nunc aliquet. Hendrerit  gravida rutrum quisque non tellus orci ac. Adipiscing at in tellus integer feugiat scelerisque varius. Quam pellentesque nec nam aliquam sem et tortorconsequat id. Orci eu lobortis elementum nibh tellus molestie nunc non blandit. Dolor morbi non arcu risus quis varius. Magna eget est lorem ipsum dolor sit amet. Ante metus dictum at tempor commodo ullamcorper a lacus. Diam in arcu cursus euismod. Nulla at volutpat diam ut venenatis tellus in metus vulputate. Tempor nec feugiat nisl pretium fusce id velit ut. \n\nFelis eget velit aliquet sagittis id consectetur. Pretium lectus quam id leo in vitae. Eget nunc lobortis mattis aliquam faucibus purus. Aliquet sagittis id consectetur purus. Odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus. Donec et odio pellentesque diam volutpat commodo sed egestas. Commodo nulla facilisi nullam vehicula ipsum. Quisque egestas diam in arcu cursus euismod. Et malesuada fames ac turpis egestas sed tempus. Quam viverra orci sagittis eu volutpat. Imperdiet dui accumsan sit amet nulla facilisi morbi tempus. Quis ipsum suspendisse ultrices gravida. Nibh tellus molestie nunc non blandit massa enim nec. Adipiscing enim eu turpis egestas pretium aenean. Sem integer vitae justo eget magna fermentum iaculis eu non.",
-                style: TextStyle(color: TColor.secondaryText, fontSize: 16),
-              ),
-            ),
+            const SizedBox(height: 36),
           ],
         ),
       ),

@@ -1,4 +1,4 @@
-package com.Mohamed.fit_bro
+package com.Mohamed.FitBro
 
 import io.flutter.embedding.android.FlutterActivity
 

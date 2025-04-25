@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../common/color_extension.dart';
 
 class TipsDetailView extends StatefulWidget {
@@ -6,7 +7,7 @@ class TipsDetailView extends StatefulWidget {
   const TipsDetailView({super.key, required this.tObj});
 
   @override
-  _TipsDetailViewState createState() => _TipsDetailViewState();
+  State<TipsDetailView> createState() => _TipsDetailViewState();
 }
 
 class _TipsDetailViewState extends State<TipsDetailView> {
@@ -15,24 +16,21 @@ class _TipsDetailViewState extends State<TipsDetailView> {
     var media = MediaQuery.of(context).size;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF9F9F9),
       appBar: AppBar(
         backgroundColor: TColor.primary,
         centerTitle: true,
-        elevation: 0.1,
+        elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Image.asset(
-            "assets/img/black_white.png",
-            width: 25,
-            height: 25,
-          ),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
         ),
         title: Text(
-          "Tips",
-          style: TextStyle(
-            color: TColor.white,
+          "Fitness Tips",
+          style: GoogleFonts.poppins(
             fontSize: 20,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
           ),
         ),
       ),
@@ -46,73 +44,94 @@ class _TipsDetailViewState extends State<TipsDetailView> {
               height: media.width * 0.55,
               fit: BoxFit.cover,
             ),
-            const SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Center(
+            const SizedBox(height: 20),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   widget.tObj["name"],
-                  style: TextStyle(
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w600,
                     color: TColor.secondaryText,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
             ),
-            _buildSectionTitle("Drink water"),
-            _buildSectionContent(
-              "To enhance your fitness journey, aim to drink plenty of water throughout the day by setting a daily intake goal based on your weight and activity level. Drink a glass of water before meals to aid digestion and keep hydrated during workouts by sipping water every 15-20 minutes. Monitor your urine color as a hydration indicator; pale yellow is ideal. Carry a reusable water bottle for convenience, and consider adding natural flavors like lemon or cucumber to make water more enjoyable. Lastly, listen to your body and increase your water intake in hot weather or during intense exercise, as proper hydration significantly impacts performance and recovery.",
+            const SizedBox(height: 20),
+            // Customized content based on the title of the tip
+            _buildSection(
+              title: widget.tObj["name"],
+              content: _getCustomContent(widget.tObj["name"]),
             ),
-            _buildSectionTitle("Calories"),
-            _buildSectionContent(
-              "To effectively manage your fitness goals, understanding calories is crucial. Track your daily caloric intake based on your personal energy needs, which can vary depending on factors like age, weight, and activity level. Focus on the quality of calories by prioritizing nutrient-dense foods, such as fruits, vegetables, whole grains, and lean proteins, over empty calories found in processed foods. Consider using a food diary or app to help monitor your intake and make adjustments as needed. Additionally, remember that balancing the calories you consume with those you burn through exercise is key for weight management, whether you're looking to lose, maintain, or gain weight.",
-            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-      child: Text(
-        title,
-        style: TextStyle(
-          color: TColor.secondaryText,
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
+  String _getCustomContent(String title) {
+    switch (title) {
+      case "About Training":
+        return "Effective training goes beyond the physical effort. It’s about consistency, proper techniques, and balance between strength and flexibility. Focus on creating a routine that includes rest and active recovery days to avoid burnout. Build intensity gradually, and always listen to your body to avoid injury.";
+
+      case "How to Weight Loss?":
+        return "Weight loss is a combination of reducing caloric intake and increasing physical activity. A balanced approach that includes regular workouts such as yoga, cardio, and strength training, along with a healthy diet, can effectively help you lose weight. Focus on whole foods, stay hydrated, and ensure you get enough sleep to support your weight loss goals.";
+
+      case "Introducing Meal Plan":
+        return "A well-structured meal plan is crucial for achieving fitness goals. Include a balance of macronutrients—proteins, carbohydrates, and healthy fats. Opt for lean proteins like chicken, tofu, or legumes, complex carbs like brown rice, and healthy fats from avocado or nuts. Plan meals ahead to avoid unhealthy food choices and maintain energy levels throughout the day.";
+
+      case "Water and Food":
+        return "Proper hydration and a healthy diet are the pillars of good health. Drink water regularly to maintain hydration, especially during workouts. Pair your meals with hydration-rich foods like fruits and vegetables, which contribute to both hydration and nutrition. Stay mindful of your food choices, as they directly impact your energy and recovery after workouts.";
+
+      case "Drink Water":
+        return "Water is essential for regulating body temperature, aiding digestion, and supporting overall performance. Make sure to drink at least 2 liters of water daily, and more if you're active. Keep a water bottle with you during your yoga or workout sessions to sip throughout. Drinking before meals helps curb hunger and improve digestion.";
+
+      case "How Many Times a Day to Eat":
+        return "Eating frequency can vary based on personal preference, but generally, eating 3 balanced meals with 2 snacks throughout the day can help maintain energy and support muscle recovery. Focus on nutrient-dense foods and avoid long gaps between meals to ensure your body has the fuel it needs for performance and recovery.";
+
+      case "Become Stronger":
+        return "To build strength, consistency is key. Include strength training exercises like squats, push-ups, and yoga poses such as plank and Warrior poses. It’s important to progressively increase intensity while allowing your muscles time to recover. Pair your workouts with adequate protein intake for muscle repair and growth.";
+
+      case "Shoes for Training":
+        return "Choosing the right shoes is essential to prevent injury and optimize performance. For yoga, lightweight, flexible shoes or even going barefoot is ideal for proper balance. For other workouts, such as running or weightlifting, look for shoes that offer support, cushioning, and stability to match the type of activity you're engaging in.";
+
+      case "Appeal Tips":
+        return "In fitness, confidence is key. Wear comfortable, moisture-wicking clothing that allows you to move freely and comfortably. Choose breathable fabrics to keep you cool during intense workouts, and invest in proper gear like a good sports bra or supportive leggings for added comfort. When you feel good in your workout gear, you’ll be more motivated to push yourself further.";
+
+      default:
+        return "Fitness tips are designed to help you reach your personal health goals. Stay consistent, focus on balance, and ensure your body gets the nutrition, hydration, and rest it needs for optimal performance.";
+    }
   }
 
-  Widget _buildSectionContent(String content) {
+  Widget _buildSection({required String title, required String content}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Text(
-        content,
-        style: TextStyle(color: TColor.secondaryText, fontSize: 16),
-      ),
-    );
-  }
-
-  List<Widget> _buildBottomNavigationItems() {
-    List<String> icons = [
-      "menu_meal_plan.png",
-      "menu_home.png",
-      "menu_weight.png",
-      "more.png",
-    ];
-
-    return icons
-        .map(
-          (icon) => InkWell(
-            onTap: () {},
-            child: Image.asset("assets/img/$icon", width: 25, height: 25),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: GoogleFonts.poppins(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: TColor.primary,
+            ),
           ),
-        )
-        .toList();
+          const SizedBox(height: 8),
+          Text(
+            content,
+            style: GoogleFonts.poppins(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: TColor.secondaryText,
+              height: 1.6,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
