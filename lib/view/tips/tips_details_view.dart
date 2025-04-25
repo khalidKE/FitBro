@@ -58,7 +58,7 @@ class _TipsDetailViewState extends State<TipsDetailView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.asset(
-                  "assets/img/1.png",
+                  "assets/img/5.png",
                   width: media.width,
                   height: media.width * 0.55,
                   fit: BoxFit.cover,

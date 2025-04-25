@@ -2,7 +2,6 @@ import 'package:FitBro/view/menu/menu_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:share_plus/share_plus.dart';
 import '../../common/color_extension.dart';
 
 class YogaView extends StatefulWidget {
@@ -13,8 +12,6 @@ class YogaView extends StatefulWidget {
 }
 
 class _YogaViewState extends State<YogaView> {
-  
-
   // Define colors for consistency with MenuView
   final Map<String, Color> fitColors = {
     "primary": const Color(0xFF1E5128),
@@ -64,7 +61,7 @@ class _YogaViewState extends State<YogaView> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.asset(
-                    "assets/img/1.png",
+                    "assets/img/yyoga.png",
                     width: media.width,
                     height: media.width * 0.55,
                     fit: BoxFit.cover,
@@ -92,16 +89,6 @@ class _YogaViewState extends State<YogaView> {
                       ),
                     ),
                     const Spacer(),
-                    IconButton(
-                      onPressed: () {
-                        
-                      },
-                      icon: Icon(
-                        Icons.share,
-                        color: isDarkMode ? Colors.white70 : Colors.blueGrey,
-                        size: 24,
-                      ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 10),

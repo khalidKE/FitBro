@@ -21,6 +21,7 @@ class _SignUpScreenState extends State<SignUpScreen>
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
   bool _hasNavigated = false; // Flag to prevent multiple navigations
+  bool _isTermsHovered = false; // Track hover state for Terms and Conditions
 
   @override
   void initState() {
@@ -63,6 +64,34 @@ class _SignUpScreenState extends State<SignUpScreen>
     );
 
     debugPrint("⚡ SignUpScreen: Navigation completed successfully");
+  }
+
+  void _showTermsAndConditions() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Terms and Conditions",
+            style: TextStyle(fontSize: 18.sp),
+          ),
+          content: SingleChildScrollView(
+            child: Text(
+              "By using FitBro, you agree to our Terms and Conditions. "
+              "These terms outline your rights and responsibilities when using our app. "
+              "By continuing to use FitBro after changes are made, you accept the revised terms.",
+              style: TextStyle(fontSize: 14.sp),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Close"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -631,27 +660,70 @@ class _SignUpScreenState extends State<SignUpScreen>
 
                                 SizedBox(height: 12.h),
 
-                                // Terms text
-                                RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    text:
-                                        "By continuing, you confirm that you agree with our ",
-                                    style: TextStyle(
-                                      color: lightColor.withOpacity(0.7),
-                                      fontSize: 12.sp,
-                                      fontFamily: 'Montserrat',
-                                    ),
-                                    children: [
-                                      TextSpan(
-                                        text: "Terms and Conditions",
-                                        style: TextStyle(
-                                          color: primaryColor,
-                                          fontWeight: FontWeight.w600,
+                                // Terms text with hover effect
+                                StatefulBuilder(
+                                  builder: (context, setInnerState) {
+                                    return GestureDetector(
+                                      onTap: _showTermsAndConditions,
+                                      child: MouseRegion(
+                                        cursor: SystemMouseCursors.click,
+                                        onEnter:
+                                            (_) => setInnerState(() {
+                                              _isTermsHovered = true;
+                                            }),
+                                        onExit:
+                                            (_) => setInnerState(() {
+                                              _isTermsHovered = false;
+                                            }),
+                                        child: RichText(
+                                          textAlign: TextAlign.center,
+                                          text: TextSpan(
+                                            text:
+                                                "By continuing, you confirm that you agree with our ",
+                                            style: TextStyle(
+                                              color: lightColor.withOpacity(
+                                                0.7,
+                                              ),
+                                              fontSize: 12.sp,
+                                              fontFamily: 'Montserrat',
+                                            ),
+                                            children: [
+                                              TextSpan(
+                                                text: "Terms and Conditions",
+                                                style: TextStyle(
+                                                  color: primaryColor,
+                                                  fontWeight: FontWeight.w600,
+                                                  decoration:
+                                                      _isTermsHovered
+                                                          ? TextDecoration
+                                                              .underline
+                                                          : TextDecoration.none,
+                                                  decorationThickness: 2,
+                                                  shadows:
+                                                      _isTermsHovered
+                                                          ? [
+                                                            Shadow(
+                                                              color: primaryColor
+                                                                  .withOpacity(
+                                                                    0.5,
+                                                                  ),
+                                                              offset:
+                                                                  const Offset(
+                                                                    0,
+                                                                    1,
+                                                                  ),
+                                                              blurRadius: 2,
+                                                            ),
+                                                          ]
+                                                          : null,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    );
+                                  },
                                 ).animate().fadeIn(
                                   duration: 800.ms,
                                   delay: 1000.ms,
