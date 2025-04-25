@@ -1,3 +1,4 @@
+import 'package:FitBro/view/menu/menu_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../common/color_extension.dart';
@@ -11,64 +12,85 @@ class TipsDetailView extends StatefulWidget {
 }
 
 class _TipsDetailViewState extends State<TipsDetailView> {
+  // Define colors for consistency
+  final Map<String, Color> fitColors = {
+    "primary": const Color(0xFF1E5128),
+    "secondary": const Color(0xFF4E9F3D),
+    "accent": const Color(0xFF8FB339),
+    "light": const Color(0xFFD8E9A8),
+    "dark": const Color(0xFF191A19),
+    "black": Colors.black,
+    "background": const Color(0xFFF9F9F9),
+    "darkBackground": const Color(0xFF2A2A2A),
+  };
+
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.of(context).size;
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF9F9F9),
-      appBar: AppBar(
-        backgroundColor: TColor.primary,
-        centerTitle: true,
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-        ),
-        title: Text(
-          "Fitness Tips",
-          style: GoogleFonts.poppins(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(
-              "assets/img/1.png",
-              width: media.width,
-              height: media.width * 0.55,
-              fit: BoxFit.cover,
+    return ValueListenableBuilder<bool>(
+      valueListenable: isDarkModeNotifier,
+      builder: (context, isDarkMode, child) {
+        return Scaffold(
+          backgroundColor:
+              isDarkMode
+                  ? fitColors["darkBackground"]
+                  : const Color(0xFFF9F9F9),
+          appBar: AppBar(
+            backgroundColor: TColor.primary,
+            centerTitle: true,
+            elevation: 0,
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
             ),
-            const SizedBox(height: 20),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  widget.tObj["name"],
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    color: TColor.secondaryText,
-                  ),
-                ),
+            title: Text(
+              "Fitness Tips",
+              style: GoogleFonts.poppins(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
               ),
             ),
-            const SizedBox(height: 20),
-            // Customized content based on the title of the tip
-            _buildSection(
-              title: widget.tObj["name"],
-              content: _getCustomContent(widget.tObj["name"]),
+          ),
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(
+                  "assets/img/1.png",
+                  width: media.width,
+                  height: media.width * 0.55,
+                  fit: BoxFit.cover,
+                ),
+                const SizedBox(height: 20),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      widget.tObj["name"],
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: isDarkMode ? Colors.white : TColor.secondaryText,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // Customized content based on the title of the tip
+                _buildSection(
+                  title: widget.tObj["name"],
+                  content: _getCustomContent(widget.tObj["name"]),
+                  isDarkMode: isDarkMode, // Pass isDarkMode
+                ),
+                const SizedBox(height: 20),
+              ],
             ),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -106,7 +128,11 @@ class _TipsDetailViewState extends State<TipsDetailView> {
     }
   }
 
-  Widget _buildSection({required String title, required String content}) {
+  Widget _buildSection({
+    required String title,
+    required String content,
+    required bool isDarkMode, // Add isDarkMode parameter
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
@@ -126,7 +152,7 @@ class _TipsDetailViewState extends State<TipsDetailView> {
             style: GoogleFonts.poppins(
               fontSize: 15,
               fontWeight: FontWeight.w400,
-              color: TColor.secondaryText,
+              color: isDarkMode ? Colors.white70 : TColor.secondaryText,
               height: 1.6,
             ),
           ),

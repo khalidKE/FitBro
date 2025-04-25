@@ -1,3 +1,4 @@
+import 'package:FitBro/view/menu/menu_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,74 +32,103 @@ class _ExerciseView2State extends State<ExerciseView2> {
     'Cardio',
   ];
 
+  // Define colors for consistency
+  final Map<String, Color> fitColors = {
+    "primary": const Color(0xFF1E5128),
+    "secondary": const Color(0xFF4E9F3D),
+    "accent": const Color(0xFF8FB339),
+    "light": const Color(0xFFD8E9A8),
+    "dark": const Color(0xFF191A19),
+    "black": Colors.black,
+    "background": const Color(0xFFF5F5F5),
+    "darkBackground": const Color(0xFF2A2A2A),
+    "white": Colors.white,
+  };
+
   @override
   Widget build(BuildContext context) {
     var media = MediaQuery.sizeOf(context);
     return BlocBuilder<ExerciseCubit, ExerciseState>(
       builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: TColor.primary,
-            centerTitle: true,
-            elevation: 4,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Image.asset(
-                "assets/img/black_white.png",
-                width: 30,
-                height: 30,
-              ),
-            ),
-            title: Text(
-              "Exercises",
-              style: TextStyle(
-                color: TColor.white,
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 1.1,
-              ),
-            ),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.search, size: 28),
-                onPressed: () {
-                  // Implement search functionality
-                },
-              ),
-            ],
-          ),
-          body: state.when(
-            loading: () => const Center(child: CircularProgressIndicator()),
-            loaded:
-                (data) => Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 8,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      MuscleTabs(muscles: muscles),
-                      const SizedBox(height: 16),
-                      Expanded(
-                        child: ListView.builder(
-                          padding: EdgeInsets.zero,
-                          itemCount: data.length,
-                          itemBuilder: (context, index) {
-                            return ExerciseCard(
-                              exercise: data[index],
-                              media: media,
-                            );
-                          },
-                        ),
-                      ),
-                    ],
+        return ValueListenableBuilder<bool>(
+          valueListenable: isDarkModeNotifier,
+          builder: (context, isDarkMode, child) {
+            return Scaffold(
+              backgroundColor:
+                  isDarkMode
+                      ? fitColors["darkBackground"]
+                      : fitColors["background"],
+              appBar: AppBar(
+                backgroundColor: TColor.primary,
+                centerTitle: true,
+                elevation: 4,
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Image.asset(
+                    "assets/img/black_white.png",
+                    width: 30,
+                    height: 30,
                   ),
                 ),
-            error: (message) => Center(child: Text("Error: $message")),
-          ),
+                title: Text(
+                  "Exercises",
+                  style: TextStyle(
+                    color: TColor.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.1,
+                  ),
+                ),
+              ),
+              body: state.when(
+                loading:
+                    () => Center(
+                      child: CircularProgressIndicator(color: TColor.primary),
+                    ),
+                loaded:
+                    (data) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 8,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          MuscleTabs(muscles: muscles),
+                          const SizedBox(height: 16),
+                          Expanded(
+                            child: ListView.builder(
+                              padding: EdgeInsets.zero,
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                return ExerciseCard(
+                                  exercise: data[index],
+                                  media: media,
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                error:
+                    (message) => Center(
+                      child: Text(
+                        "Error: $message",
+                        style: TextStyle(
+                          color:
+                              isDarkMode
+                                  ? fitColors["white"]
+                                  : fitColors["black"],
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+              ),
+            );
+          },
         );
       },
     );
@@ -113,90 +143,138 @@ class ExerciseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: TColor.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            offset: Offset(0, 4),
-            blurRadius: 8,
+    // Define colors for consistency
+    final Map<String, Color> fitColors = {
+      "primary": const Color(0xFF1E5128),
+      "secondary": const Color(0xFF4E9F3D),
+      "accent": const Color(0xFF8FB339),
+      "light": const Color(0xFFD8E9A8),
+      "dark": const Color(0xFF191A19),
+      "black": Colors.black,
+      "background": const Color(0xFFF5F5F5),
+      "darkBackground": const Color(0xFF2A2A2A),
+      "white": Colors.white,
+    };
+
+    return ValueListenableBuilder<bool>(
+      valueListenable: isDarkModeNotifier,
+      builder: (context, isDarkMode, child) {
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: isDarkMode ? fitColors["darkBackground"] : TColor.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(isDarkMode ? 0.3 : 0.2),
+                offset: Offset(0, 4),
+                blurRadius: 8,
+              ),
+            ],
           ),
-        ],
-      ),
-      child: InkWell(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => WorkoutDetailView(exercise: exercise),
-            ),
-          );
-        },
-        child: Column(
-          children: [
-            Stack(
-              alignment: Alignment.center,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => WorkoutDetailView(exercise: exercise),
+                ),
+              );
+            },
+            child: Column(
               children: [
-                CachedNetworkImage(
-                  imageUrl: exercise.image,
-                  width: media.width,
-                  height: media.width * 0.55,
-                  fit: BoxFit.cover,
-                ),
-                Container(
-                  width: media.width,
-                  height: media.width * 0.55,
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
-                  ),
-                ),
-                Icon(Icons.play_circle_outline, color: Colors.white, size: 60),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      exercise.name,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
-                      style: TextStyle(
-                        color: TColor.secondaryText,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl: exercise.image,
+                      width: media.width,
+                      height: media.width * 0.55,
+                      fit: BoxFit.cover,
+                      errorWidget:
+                          (context, url, error) => Container(
+                            width: media.width,
+                            height: media.width * 0.55,
+                            color:
+                                isDarkMode
+                                    ? Colors.grey[800]
+                                    : Colors.grey.shade300,
+                            child: Icon(
+                              Icons.error,
+                              color: isDarkMode ? Colors.white70 : Colors.black,
+                              size: 50,
+                            ),
+                          ),
+                      placeholder:
+                          (context, url) => Center(
+                            child: CircularProgressIndicator(
+                              color: TColor.primary,
+                            ),
+                          ),
+                    ),
+                    Container(
+                      width: media.width,
+                      height: media.width * 0.55,
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) =>
-                                  WorkoutDetailView(exercise: exercise),
-                        ),
-                      );
-                    },
-                    icon: Image.asset(
-                      "assets/img/more.png",
-                      width: 28,
-                      height: 28,
+                    Icon(
+                      Icons.play_circle_outline,
+                      color: Colors.white,
+                      size: 60,
                     ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 20,
                   ),
-                ],
-              ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          exercise.name,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: TextStyle(
+                            color:
+                                isDarkMode
+                                    ? fitColors["white"]
+                                    : TColor.secondaryText,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) =>
+                                      WorkoutDetailView(exercise: exercise),
+                            ),
+                          );
+                        },
+                        icon: Image.asset(
+                          "assets/img/more.png",
+                          width: 28,
+                          height: 28,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -214,26 +292,48 @@ class CatagoriesBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: () {
-          context.read<ExerciseCubit>().setSelectedIndex(index);
-        },
-        child: Chip(
-          label: Text(name),
-          backgroundColor:
-              isSelected ? const Color(0xff388e3c) : const Color(0xfff4caf50),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0),
+    // Define colors for consistency
+    final Map<String, Color> fitColors = {
+      "primary": const Color(0xFF1E5128),
+      "secondary": const Color(0xFF4E9F3D),
+      "accent": const Color(0xFF8FB339),
+      "light": const Color(0xFFD8E9A8),
+      "dark": const Color(0xFF191A19),
+      "black": Colors.black,
+      "background": const Color(0xFFF5F5F5),
+      "darkBackground": const Color(0xFF2A2A2A),
+      "white": Colors.white,
+    };
+
+    return ValueListenableBuilder<bool>(
+      valueListenable: isDarkModeNotifier,
+      builder: (context, isDarkMode, child) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(8),
+            onTap: () {
+              context.read<ExerciseCubit>().setSelectedIndex(index);
+            },
+            child: Chip(
+              label: Text(name),
+              backgroundColor:
+                  isSelected
+                      ? fitColors["secondary"]
+                      : (isDarkMode
+                          ? Colors.grey[700]
+                          : const Color(0xfff4caf50)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              labelStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: isDarkMode ? fitColors["white"] : Colors.white,
+              ),
+            ),
           ),
-          labelStyle: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

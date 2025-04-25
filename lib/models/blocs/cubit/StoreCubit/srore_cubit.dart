@@ -1,7 +1,6 @@
 import 'package:FitBro/models/blocs/cubit/StoreCubit/srore_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../consts/Collections.dart';
 import '../../../data/Local/SharedKeys.dart';

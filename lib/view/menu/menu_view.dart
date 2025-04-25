@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:FitBro/screens/Auth_Screen/Login_Screen.dart';
 import 'package:FitBro/screens/presets.dart';
 import 'package:FitBro/view/menu/yoga_view.dart';
-import 'package:FitBro/view/settings/setting_view.dart';
 import '../../common/color_extension.dart';
 import '../../common_widget/plan_row.dart';
 import '../../screens/ExerciseHistoryScreen/ExerciseHistoryScreen.dart';
@@ -198,7 +197,7 @@ class _MenuViewState extends State<MenuView>
         SnackBar(
           backgroundColor: fitColors["primary"],
           content: const Text(
-            'Training reminders enabled. You will receive daily notifications.',
+            'Training reminders enabled.\n You will receive daily notifications.',
             style: TextStyle(color: Colors.white),
           ),
           duration: const Duration(seconds: 3),
